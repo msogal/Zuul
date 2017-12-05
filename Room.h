@@ -16,17 +16,25 @@ class Room{
   char* getName();
   //set each room's exits to build the map of the labyrinth
   void addExit(char* direction, Room* r);
-  //will be used only a couple times, for traps that shut doors
-  void removeExit(char* direction, Room* r);
   //to start with an item in a room; also to pick up and drop items in a room
-  void addItem(Item i);
-  void removeItem(Item i);
+  void addItem(Item* i);
+  //to remove items
+  void removeItem(Item* i);
   //to add Monsters to the room for the player to fight
-  void addMonster(Monster m);
+  void printItems();
+  void addMonster(Monster* m);
   //after the player has killed a monster, it will be removed
-  void removeMonster(Monster m);
+  void removeMonster(Monster* m);
   //when the player enters, the room will say what it is
   void printDescription();
+  //returns description
+  char* getDescription();
+  //list out the names of the monsters in the room
+  void printMonsters();
+  //because you for some reason can't use a char* to access a map index, I'm using this method to get room to which each exit leads
+  Room* nextRoom(char* direction);
+  //lists out exits
+  void printExits();
   //getters for the room's exits, items, and monsters in it
   map<char*, Room*> getExits();
   vector<Item*> getInventory();

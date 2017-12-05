@@ -9,8 +9,8 @@ Item::Item(char* nname){
 int Item::getDamage(){
   return damage;
 }
-int Item::getAccuracy(){
-  return accuracy;
+void Item::setDamage(int d){
+  damage = d;
 }
 char* Item::getName(){
   return name;

@@ -10,24 +10,15 @@ using namespace std;
 class Monster{
  public:
   //constructor
-  Monster(char* name);
-  int getWS();
-  int getBS();
-  int getStrength();
-  int getToughness();
+  Monster(char* nname);
+  char* getName();
   int getHP();
-  void setWS(int w);
-  void setBS(int b);
-  void setStrength(int s);
-  void setToughness(int t);
   void setHP(int hp);
-  vector<Item*> getWeapons();
+  void setDamage(int d);
+  int getDamage();
  private:
-  vector<Item*> weapons;
-  int weapon_skill;
-  int ballistic_skill;
-  int strength;
-  int toughness;
-  int hp;
+   char* name;
+   int hp;
+  int damage;
 };
 #endif

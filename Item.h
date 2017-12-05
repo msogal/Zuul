@@ -9,11 +9,10 @@ class Item{
   //constructor
   Item(char* nname);
   int getDamage();
-  int getAccuracy();
   char* getName();
+  void setDamage(int d);
  private:
   int damage;
-  int accuracy;
   char*name;
 };
 #endif
