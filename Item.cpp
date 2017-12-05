@@ -3,9 +3,11 @@
 #include "Item.h"
 
 using namespace std;
+//constructor
 Item::Item(char* nname){
   name = nname;
 }
+//getters and settes for damage
 int Item::getDamage(){
   return damage;
 }

@@ -11,6 +11,7 @@ class Monster{
  public:
   //constructor
   Monster(char* nname);
+  //getters+setters from name, damage, and health
   char* getName();
   int getHP();
   void setHP(int hp);
@@ -18,7 +19,9 @@ class Monster{
   int getDamage();
  private:
    char* name;
+   //the monster's health
    int hp;
+   //how much damage it deals
   int damage;
 };
 #endif

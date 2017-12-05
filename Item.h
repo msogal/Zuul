@@ -8,6 +8,7 @@ class Item{
  public:
   //constructor
   Item(char* nname);
+  //if the item is a weapon, how much damage it deals; otherwise, this will always be 0
   int getDamage();
   char* getName();
   void setDamage(int d);

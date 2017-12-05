@@ -1,3 +1,9 @@
+/*
+Labyrinth is a game where you navigate a maze and fight monsters
+By Mihira Sogal 
+12/4/2017
+ */
+
 #include <iostream>
 #include <cstring>
 #include "Item.h"
