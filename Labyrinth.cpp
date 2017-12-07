@@ -13,10 +13,12 @@ By Mihira Sogal
 #include <map>
 using namespace std;
 
+Item* itemByName(char itemname[80], vector<Item*> v);
+
 int main(){
   //setup
   //create each room, with the monsters and items that go in it. Also set the description for each room (the info given to player upon entering)
-  Room* entrance = new Room("Entrance", " ");
+  Room* entrance = new Room("Entrance", "you are in the enterance of the Labyrinth ");
   Room* room16 = new Room("room16", " ");
   Room*  room17 = new Room("room17", " ");
   Room* room14 = new Room("room14", " ");
@@ -51,7 +53,7 @@ int main(){
   //add exits to room14
   room14->addExit("EAST", room15);
   room14->addExit("NORTH", room9);
-  room14->addExit("South", room16);
+  room14->addExit("SOUTH", room16);
   //add exits to room 15
   room15->addExit("NORTH", room8);
   room15->addExit("SOUTH", room17);
@@ -63,7 +65,7 @@ int main(){
   room9->addExit("WEST", room3);
   //add exits to room 8
   room8->addExit("NORTH", room7);
-  room8->addExit("South", room15);
+  room8->addExit("SOUTH", room15);
   room8->addExit("WEST", room9);
   //add exits to room 3
   room3->addExit("NORTH", mino_layer);
@@ -116,23 +118,40 @@ int main(){
   mino_layer->addExit("EAST", room2);
   mino_layer->addExit("WEST", room4);
 
-  //create items and place them in the proper rooms
+  //create items. Place a pointer to that item in a main vector that stores all the items, and another pointer to that item in the room where it goes
+  vector<Item*> main_inventory;
+ 
   Item* astring = new Item("Ariadne's string");
   astring->setDamage(0);
-  room17->addItem(astring);
+  Item* astring2 = astring;
+  room17->addItem(astring2);
+  main_inventory.push_back(astring);
+
   Item* sword = new Item("Sword");
   sword->setDamage(3);
-  room1->addItem(sword);
+  Item* sword2 = sword;
+  room1->addItem(sword2);
+  main_inventory.push_back(sword);
+    
   Item* axe = new Item("Axe");
   axe->setDamage(5);
-  room4->addItem(axe);
+  Item* axe2 = axe;
+  room4->addItem(axe2);
+  main_inventory.push_back(axe);
+
   Item* mirror = new Item("Mirror");
   mirror->setDamage(0);
-  room7->addItem(mirror);
+  Item* mirror2 = mirror;
+  room7->addItem(mirror2);
+  main_inventory.push_back(mirror);
+  
   Item* shield = new Item("Shield");
   shield->setDamage(0);
-  room2->addItem(shield);
+  Item*shield2 = shield;
+  room2->addItem(shield2);
+  main_inventory.push_back(shield);
 
+  
   //add the monsters to their rooms
   Monster* minotaur = new Monster("Minotaur");
   minotaur->setHP(15);
@@ -150,6 +169,8 @@ int main(){
   //the player starts with a knife
   Item* knife = new Item("knife");
   knife->setDamage(1);
+  Item* knife2 = knife;
+  main_inventory.push_back(knife2);
   inventory.push_back(knife);
     
   vector<Room*> travelled; //tracks which rooms the player has been to
@@ -163,11 +184,12 @@ int main(){
   bool playing = true;
   while(playing){
     //print the current room description, if there is one
-    if(!(strcmp(current_room->getDescription(), " ")==0)){
+    cout<<current_room->getName();
+    /*if(!(strcmp(current_room->getDescription(), " ")==0)){
       cout<<current_room->getDescription();
     }else{//give the generic room description
       cout<<"You are in a room of the Labyrinth"<<endl;
-    }
+      }*/
 
 
     //if the player has already travelled here, and they have Ariadne's string, tell them
@@ -266,7 +288,8 @@ int main(){
     cin.ignore(80, '\n');
     if(strcmp(action, "MOVE")==0){
       //change the current room
-      travelled.push_back(current_room);//logs having been to the current room
+      Room* r = current_room;
+      travelled.push_back(r);//logs having been to the current room
       //chose which exit to take
       char ext[80];
       cout<<"Which exit do you wish to take?"<<endl;
@@ -274,33 +297,31 @@ int main(){
       cin.ignore(80, '\n');
       current_room = current_room->nextRoom(ext);
     }else if(strcmp(action, "TAKE")==0){
-      //pick up an item
-      char itemname [80];
-      cout<<"Enter the name of the item you wish to pick up"<<endl;
+      //pick up an item: go through the main inventory until a match is found; then, create an Item* in the player inventory pointing to that item. Finally, remove the corresponding item* from the room
+      cout<<"Enter the name of the item you wish to take"<<endl;
+      char itemname[80];
       cin.get(itemname, 80);
       cin.ignore(80, '\n');
-      if(!current_room->getInventory().empty()){
-	for(vector<Item*>::iterator it = current_room->getInventory().begin(); it != current_room->getInventory().end(); it++){
-	  if(strcmp((*it)->getName(), itemname)==0){
-	    //match
-	    inventory.push_back(*it);
-	    current_room->getInventory().erase(it);
-	    break;
-	  }
-	}
-      }
+      //add to player inventory
+      Item* i = itemByName(itemname, current_room->getInventory());
+      inventory.push_back(i);
+      //remove from room
+      current_room->removeItem(i);
+
       
     }else if(strcmp(action, "DROP")==0){
-      //drop the item
+      //drop the item; find a match, then add a pointer to the current room pointing to it. Then erase from the player inventory
       char itemname[80];
       cout<<"Enter the name of the item you wish to drop"<<endl;
       cin.get(itemname, 80);
       cin.ignore(80, '\n');
+      //add to room
+      Item* i = itemByName(itemname, inventory);
+      current_room->addItem(i);
+      //remove from player
       if(!current_room->getInventory().empty()){
 	for(vector<Item*>::iterator it = inventory.begin(); it != inventory.end(); it++){
 	  if(strcmp((*it)->getName(), itemname)==0){
-	    //match
-	    current_room->getInventory().push_back(*it);
 	    inventory.erase(it);
 	    break;
 	  }
@@ -316,7 +337,7 @@ int main(){
       cout<<"You are dead"<<endl;
       playing = false;
     }
-    //check if the minotaur is alive
+    //check if the minotaur is alive, by seeing it it's lair is empty
     if(strcmp(current_room->getName(), exit->getName())==0 && mino_layer->getMonsters().empty()){
       cout<<"You win!!"<<endl;
       playing = false;
@@ -325,6 +346,17 @@ int main(){
   
 
   return 0;
+}
+Item* itemByName(char itemname[80], vector<Item*> v){
+  if(!v.empty()){
+    for(vector<Item*>::iterator it = v.begin(); it != v.end(); it++){
+      if(strcmp((*it)->getName(), itemname)==0){
+	return *it;
+      }
+					    
+    }
+  }
+ 
 }
 
 

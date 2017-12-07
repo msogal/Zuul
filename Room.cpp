@@ -27,6 +27,7 @@ void Room::addItem(Item* i){
 
 }
   void Room::removeItem(Item* i){
+  if(!inventory.empty()){
    for(vector<Item*>::iterator it = inventory.begin(); it != inventory.end(); it++){
      //search the inventory for that item by name, then delete it
      if(strcmp((*it)->getName(), i->getName())==0){
@@ -34,6 +35,7 @@ void Room::addItem(Item* i){
        break;
      }
    }
+  }
  }
   void Room::addMonster(Monster* m){
     monsters.push_back(m);
@@ -63,7 +65,8 @@ Room* Room::nextRoom(char* direction){
     if(strcmp(direction, get<0>(*it))==0){
       return get<1>(*it);
     }
-    return new Room("noexit", " ");
+    //   return new Room(" noexits", " ");
+    
   }
 }
 //list the names of all Monsters in this room
@@ -84,6 +87,6 @@ void Room::printItems(){
 void Room::printExits(){
   cout<<"There are exits: "<<endl;
   for(map<char*, Room*>::iterator it = exits.begin(); it != exits.end(); it++){
-    cout<<get<0>(*it)<<endl;
+    cout<<get<0>(*it)<<" , "<<get<1>(*it)->getName()<<endl;
   }
 }
