@@ -226,7 +226,8 @@ int main(){
     if(!current_room->getInventory().empty()){
       current_room->printItems();
     }
-    //then, list the monsters, and have the player fight them
+    //then, list the monsters, and have the player fight them ****This Section does not work***
+    /*
     if(!current_room->getMonsters().empty()){
       cout<<"These monsters are in the room!: "<<endl;
       current_room->printMonsters();
@@ -269,10 +270,11 @@ int main(){
 	    current_room->getMonsters().erase(it);
 	    break;
 	  }
-	}
-      }
+	  }
+	  }*/
+    
       
-    }
+    
     
     
     //prompt for action
@@ -337,16 +339,23 @@ int main(){
       cout<<"You are dead"<<endl;
       playing = false;
     }
+    if(strcmp(current_room->getName(), exit->getName()) ==0){
+      cout<<"You win!"<<endl;
+      playing = false;
+    }
     //check if the minotaur is alive, by seeing it it's lair is empty
+    /*
     if(strcmp(current_room->getName(), exit->getName())==0 && mino_layer->getMonsters().empty()){
       cout<<"You win!!"<<endl;
       playing = false;
     }
-  }
+    */
+    //}
   
-
+}
   return 0;
 }
+
 Item* itemByName(char itemname[80], vector<Item*> v){
   if(!v.empty()){
     for(vector<Item*>::iterator it = v.begin(); it != v.end(); it++){
